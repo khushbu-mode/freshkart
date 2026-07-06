@@ -1,33 +1,29 @@
-function Categories() {
+import categoryData from "./categoryData";
+import CategoryCard from "./CategoryCard";
+
+function Category() {
   return (
-    <section className="max-w-7xl mx-auto px-6 mt-10">
-      <h2 className="text-3xl font-bold mb-6">
+    <section className="max-w-7xl mx-auto px-3 mt-10">
+
+      <h2 className="text-3xl font-bold mb-8">
         Shop by Category
       </h2>
 
-      <div className="grid grid-cols-5 gap-5">
-        <div className="bg-white rounded-xl h-32 shadow flex items-center justify-center">
-          Category
-        </div>
+      <div className="grid grid-cols-4 gap-6">
 
-        <div className="bg-white rounded-xl h-32 shadow flex items-center justify-center">
-          Category
-        </div>
+        {categoryData.map((item) => (
+          <CategoryCard
+            key={item.id}
+            title={item.title}
+            Icon={item.icon}
+            color={item.color}
+          />
+        ))}
 
-        <div className="bg-white rounded-xl h-32 shadow flex items-center justify-center">
-          Category
-        </div>
-
-        <div className="bg-white rounded-xl h-32 shadow flex items-center justify-center">
-          Category
-        </div>
-
-        <div className="bg-white rounded-xl h-32 shadow flex items-center justify-center">
-          Category
-        </div>
       </div>
+
     </section>
   );
 }
 
-export default Categories;
+export default Category;

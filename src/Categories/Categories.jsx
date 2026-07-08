@@ -1,4 +1,4 @@
-import categoryData from "./categoryData";
+import categoryData from "../data/categoriesData";
 import CategoryCard from "./CategoryCard";
 
 function Category() {

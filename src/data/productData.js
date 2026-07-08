@@ -1,16 +1,25 @@
 import Milk from "../../src/assets/products/milk.jfif";
+
 import Apple from "../../src/assets/products/apple.jfif";
+
 import Bread from "../../src/assets/products/bread.jfif";
+
 import Banana from "../../src/assets/products/banana.jfif";
+
 import Eggs from "../../src/assets/products/eggs.jfif";
+
 import Juice from "../../src/assets/products/juice.jfif";
+
 import Cheese from "../../src/assets/products/cheese.jfif";
+
 import Chips from "../../src/assets/products/chips.png";
+
 
 const productData = [
   {
     id: 1,
     name: "Amul Taaza Milk",
+    category: "Dairy",
     quantity: "500 ml",
     price: 32,
     image: Milk,
@@ -18,6 +27,7 @@ const productData = [
   {
     id: 2,
     name: "Fresh Apple",
+    category: "Fruits",
     quantity: "1 Kg",
     price: 149,
     image: Apple,
@@ -25,6 +35,7 @@ const productData = [
   {
     id: 3,
     name: "Brown Bread",
+    category: "Bakery",
     quantity: "400 g",
     price: 45,
     image: Bread,
@@ -32,6 +43,7 @@ const productData = [
   {
     id: 4,
     name: "Banana",
+    category: "Fruits",
     quantity: "6 pcs",
     price: 55,
     image: Banana,
@@ -39,6 +51,7 @@ const productData = [
   {
     id: 5,
     name: "Eggs",
+    category: "Dairy",
     quantity: "12 pcs",
     price: 89,
     image: Eggs,
@@ -46,6 +59,7 @@ const productData = [
   {
     id: 6,
     name: "Orange Juice",
+    category: "Beverages",
     quantity: "1 L",
     price: 120,
     image: Juice,
@@ -53,6 +67,7 @@ const productData = [
   {
     id: 7,
     name: "Cheddar Cheese",
+    category: "Dairy",
     quantity: "200 g",
     price: 180,
     image: Cheese,
@@ -60,6 +75,7 @@ const productData = [
   {
     id: 8,
     name: "Potato Chips",
+    category: "Snacks",
     quantity: "100 g",
     price: 30,
     image: Chips,

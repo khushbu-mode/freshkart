@@ -1,14 +1,25 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const CartContext = createContext();
 
 export function CartProvider({ children }) {
 
-  const [cartItems, setCartItems] = useState([]);
+
+const [cartItems, setCartItems] = useState(() => {
+// local storage is used to persist the cart items across page reloads.
+
+  const savedCart = localStorage.getItem("cart");
+
+  console.log("Saved Cart:", savedCart);
+
+  return savedCart ? JSON.parse(savedCart) : [];
+
+});
+
 
   // Add Product
   function addToCart(product) {
-
+console.log("addToCart Called", product);
     const existingProduct = cartItems.find(
       (item) => item.id === product.id
     );
@@ -98,6 +109,16 @@ export function CartProvider({ children }) {
 
   }
 
+
+ useEffect(() => {
+  console.log("Cart Changed:", cartItems);
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cartItems)
+  );
+
+}, [cartItems]);
   return (
 
     <CartContext.Provider

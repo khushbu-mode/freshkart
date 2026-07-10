@@ -9,6 +9,7 @@ function Products() {
 
   const [selectedCategory, setSelectedCategory] = useState("All");
 
+  // search implementation & filtering products based on search and selected category
   const filteredProducts = productData.filter((product) => {
     const matchesSearch = product.name
       .toLowerCase()
@@ -87,7 +88,7 @@ function Products() {
             key={product.id}
             id={product.id}
             name={product.name}
-            quantity={product.quantity}
+            unit={product.unit}
             price={product.price}
             image={product.image}
           />

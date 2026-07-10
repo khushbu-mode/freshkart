@@ -25,11 +25,11 @@ function ProductSection() {
       <div className="grid grid-cols-4 gap-6">
 
         {productData.map((product) => (
-          <ProductCard
+         <ProductCard
   key={product.id}
   id={product.id}
   name={product.name}
-  quantity={product.quantity}
+  unit={product.unit}
   price={product.price}
   image={product.image}
 />

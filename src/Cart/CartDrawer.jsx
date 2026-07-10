@@ -1,8 +1,10 @@
 import CartItem from "./CartItem";
 import BillDetails from "./BillDetails";
+import { useCart } from "../Hooks/useCart";
 
 function CartDrawer({ isOpen, onClose }) {
 
+  const { cartItems } = useCart();
   if (!isOpen) return null;
 
   return (
@@ -29,8 +31,22 @@ function CartDrawer({ isOpen, onClose }) {
 
         </div>
 
-        <CartItem />
+{cartItems.length === 0 ? (
 
+  <p className="text-center text-gray-500 mt-20">
+    Your cart is empty
+  </p>
+
+) : (
+
+  cartItems.map((item) => (
+    <CartItem
+      key={item.id}
+      item={item}
+    />
+  ))
+
+)}
         <BillDetails />
 
         <button

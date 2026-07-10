@@ -4,9 +4,13 @@ import { IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import CartDrawer from "../Cart/CartDrawer";
+import { useCart } from "../Hooks/useCart";
+
 
 function Navbar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const { cartItems } = useCart();
   
   // const [search, setSearch] = useState("");
 
@@ -68,8 +72,8 @@ function Navbar() {
               className="flex items-center gap-2 bg-green-600 text-white px-5 h-10 rounded-lg"
             >
               <FaShoppingCart />
-              <span>Cart</span>
-            </button>
+<span>Cart ({cartItems.length})</span>     
+       </button>
 
 
           </div>

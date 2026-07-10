@@ -1,12 +1,25 @@
 import { Link } from "react-router-dom";
+import { useCart } from "../Hooks/useCart";
 
 function ProductCard({
   id,
   name,
-  quantity,
+  unit,
   price,
   image,
 }) {
+
+const {
+  cartItems,
+  addToCart,
+  increaseQuantity,
+  decreaseQuantity,
+} = useCart();
+
+const cartItem = cartItems.find(
+  (item) => item.id === id
+);
+
   return (
 
     <Link to={`/product/${id}`}>
@@ -45,10 +58,10 @@ function ProductCard({
           {name}
         </h3>
 
-        {/* Quantity */}
+        {/* unit */}
 
-        <p className="text-gray-500 mt-2">
-          {quantity}
+       <p className="text-gray-500 mt-2">
+          {unit}
         </p>
 
         {/* Bottom */}
@@ -59,18 +72,68 @@ function ProductCard({
             ₹{price}
           </span>
 
-          <button
-            className="
-            bg-green-600
-            hover:bg-green-700
-            text-white
-            px-4
-            py-2
-            rounded-lg
-            "
-          >
-            + ADD
-          </button>
+         {
+  cartItem ? (
+
+    <div className="flex items-center gap-3">
+
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          decreaseQuantity(id);
+        }}
+        className="bg-green-600 text-white w-8 h-8 rounded"
+      >
+        -
+      </button>
+
+      <span className="font-semibold">
+        {cartItem.quantity}
+      </span>
+
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          increaseQuantity(id);
+        }}
+        className="bg-green-600 text-white w-8 h-8 rounded"
+      >
+        +
+      </button>
+
+    </div>
+
+  ) : (
+
+    <button
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        addToCart({
+          id,
+          name,
+          unit,
+          price,
+          image,
+        });
+      }}
+      className="
+      bg-green-600
+      hover:bg-green-700
+      text-white
+      px-4
+      py-2
+      rounded-lg
+      "
+    >
+      + ADD
+    </button>
+
+  )
+}  
 
         </div>
 

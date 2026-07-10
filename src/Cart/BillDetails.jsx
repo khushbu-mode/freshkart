@@ -1,34 +1,57 @@
+import { useCart } from "../Hooks/useCart";
+
 function BillDetails() {
+
+  const { cartItems } = useCart();
+
+  const subtotal = cartItems.reduce(
+
+    (total, item) => total + item.price * item.quantity,
+
+    0
+
+  );
+
+  const deliveryCharge = subtotal > 0 ? 40 : 0;
+
+  const handlingCharge = subtotal > 0 ? 10 : 0;
+
+  const total =
+    subtotal +
+    deliveryCharge +
+    handlingCharge;
+
   return (
-    <div className="mt-6 bg-gray-50 rounded-xl p-4">
 
-      <h2 className="font-bold text-lg mb-4">
-        Bill Details
-      </h2>
+    <div className="mt-8 border-t pt-5">
 
-      <div className="flex justify-between mb-2">
-        <span>Items Total</span>
-        <span>₹300</span>
+      <div className="flex justify-between mb-3">
+        <span>Subtotal</span>
+        <span>₹{subtotal}</span>
       </div>
 
-      <div className="flex justify-between mb-2">
-        <span>Delivery Charge</span>
-        <span>₹25</span>
+      <div className="flex justify-between mb-3">
+        <span>Delivery</span>
+        <span>₹{deliveryCharge}</span>
       </div>
 
-      <div className="flex justify-between mb-2">
-        <span>Handling Charge</span>
-        <span>₹5</span>
+      <div className="flex justify-between mb-3">
+        <span>Handling</span>
+        <span>₹{handlingCharge}</span>
       </div>
 
-      <hr className="my-3" />
+      <div className="flex justify-between font-bold text-xl mt-5">
 
-      <div className="flex justify-between font-bold text-lg">
-        <span>Grand Total</span>
-        <span>₹330</span>
+        <span>Total</span>
+
+        <span>
+          ₹{total}
+        </span>
+
       </div>
 
     </div>
+
   );
 }
 

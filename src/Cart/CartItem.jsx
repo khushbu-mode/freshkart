@@ -1,42 +1,75 @@
-function CartItem() {
+import { FaTrash } from "react-icons/fa";
+import { useCart } from "../Hooks/useCart";
+
+function CartItem({ item }) {
+
+  const {
+    increaseQuantity,
+    decreaseQuantity,
+    removeFromCart,
+  } = useCart();
+
   return (
-    <div className="flex items-center justify-between border-b py-4">
 
-      <div className="flex items-center gap-3">
+    <div className="flex gap-4 border-b py-5">
 
-        <img
-          src="https://via.placeholder.com/70"
-          alt="Milk"
-          className="w-16 h-16 object-contain"
-        />
+      {/* Image */}
 
-        <div>
-          <h3 className="font-semibold">
-            Amul Taaza Milk
-          </h3>
+      <img
+        src={item.image}
+        alt={item.name}
+        className="w-20 h-20 object-contain"
+      />
 
-          <p className="text-gray-500 text-sm">
-            500 ml
-          </p>
+      {/* Details */}
 
-          <h4 className="font-bold mt-1">
-            ₹32
-          </h4>
+      <div className="flex-1">
+
+        <h3 className="font-semibold">
+          {item.name}
+        </h3>
+
+        <p className="text-gray-500 text-sm mt-1">
+          {item.unit}
+        </p>
+
+        <p className="font-bold mt-2">
+          ₹{item.price}
+        </p>
+
+        <div className="flex items-center gap-3 mt-4">
+
+          <button
+            onClick={() => decreaseQuantity(item.id)}
+            className="border px-3 rounded"
+          >
+            -
+          </button>
+
+          <span>
+            {item.quantity}
+          </span>
+
+          <button
+            onClick={() => increaseQuantity(item.id)}
+            className="border px-3 rounded"
+          >
+            +
+          </button>
+
+          <button
+            onClick={() => removeFromCart(item.id)}
+            className="text-red-500 ml-auto"
+          >
+            <FaTrash />
+          </button>
+
         </div>
 
       </div>
 
-      <div className="flex items-center gap-3 bg-green-600 text-white rounded-lg px-3 py-1">
-
-        <button>-</button>
-
-        <span>1</span>
-
-        <button>+</button>
-
-      </div>
-
     </div>
+
   );
 }
 

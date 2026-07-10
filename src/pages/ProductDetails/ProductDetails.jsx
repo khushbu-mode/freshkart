@@ -1,8 +1,11 @@
 import { useParams } from "react-router-dom";
 import productData from "../../data/productData";
+import { useCart } from "../../Hooks/useCart";
+
 
 function ProductDetails() {
   const { id } = useParams();
+  const { addToCart } = useCart();
 
   const product = productData.find(
     (item) => item.id === Number(id)
@@ -35,9 +38,9 @@ function ProductDetails() {
             {product.name}
           </h1>
 
-          <p className="text-gray-500 mt-4">
-            {product.quantity}
-          </p>
+         <p className="text-gray-500 mt-4">
+  {product.unit}
+</p>
 
           <h2 className="text-3xl font-bold mt-6">
             ₹{product.price}
@@ -47,7 +50,7 @@ function ProductDetails() {
             Fresh quality product delivered in minutes.
           </p>
 
-          <button
+          {/* <button
             className="
             mt-8
             bg-green-600
@@ -59,7 +62,22 @@ function ProductDetails() {
             "
           >
            + Add To Cart
-          </button>
+          </button> */}
+
+<button
+onClick={() => addToCart(product)}
+className="
+            mt-8
+            bg-green-600
+            text-white
+            px-8
+            py-3
+            rounded-xl
+            hover:bg-green-700
+            "
+>
+Add To Cart
+</button>
 
         </div>
 

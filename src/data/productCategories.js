@@ -1,10 +1,11 @@
 const productCategories = [
   "All",
-  "Fruits",
-  "Dairy",
-  "Bakery",
-  "Beverages",
-  "Snacks",
+  "beauty",
+  "fragrances",
+  "groceries",
+  "furniture",
+  "tops",
+  "mens-shirts",
 ];
 
 export default productCategories;

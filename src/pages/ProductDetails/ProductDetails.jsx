@@ -1,15 +1,32 @@
 import { useParams } from "react-router-dom";
-import productData from "../../data/productData";
 import { useCart } from "../../Hooks/useCart";
+import { useEffect, useState } from "react";
+import api from "../../Api/api";
 
 
 function ProductDetails() {
   const { id } = useParams();
   const { addToCart } = useCart();
 
-  const product = productData.find(
-    (item) => item.id === Number(id)
-  );
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+
+    const fetchProduct = async () => {
+      try{
+       const response = await getProductById(id); 
+       setProduct(response.data);
+      }catch(error){
+        console.log(error);
+      }
+    }
+
+    fetchProduct();
+  }, [id]);
+
+  // const product = productData.find(
+  //   (item) => item.id === Number(id)
+  // );
 
   if (!product) {
     return <h1>Product Not Found</h1>;
@@ -24,8 +41,8 @@ function ProductDetails() {
 
         <div className="border rounded-2xl p-8 flex justify-center">
           <img
-            src={product.image}
-            alt={product.name}
+            src={product.thumbnail}
+            alt={product.title}
             className="w-80 h-80 object-contain"
           />
         </div>
@@ -39,7 +56,7 @@ function ProductDetails() {
           </h1>
 
          <p className="text-gray-500 mt-4">
-  {product.unit}
+  {product.category}
 </p>
 
           <h2 className="text-3xl font-bold mt-6">

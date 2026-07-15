@@ -1,17 +1,32 @@
 import { IoSearchOutline } from "react-icons/io5";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import api from "../../Api/api";
 import ProductCard from "../../ProductCard/ProductCard";
-import productData from "../../data/productData";
 import productCategories from "../../data/productCategories";
 
 function Products() {
   const [search, setSearch] = useState("");
 
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+
+    const fetchProducts = async () => {
+      try {
+        const response = await getCategories();
+        setProducts(response.data.products);
+      }catch (error) {
+        console.log(error);
+      }   
+    }
+
+    fetchProducts();
+  }, [])
 
   // search implementation & filtering products based on search and selected category
-  const filteredProducts = productData.filter((product) => {
-    const matchesSearch = product.name
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.title
       .toLowerCase()
       .includes(search.toLowerCase());
 
@@ -87,10 +102,10 @@ function Products() {
           <ProductCard
             key={product.id}
             id={product.id}
-            name={product.name}
-            unit={product.unit}
+            name={product.title}
+            unit={product.category}
             price={product.price}
-            image={product.image}
+            image={product.thumbnail}
           />
 
         ))}

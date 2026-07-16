@@ -12,4 +12,8 @@ export const getProductById = (id) => {
 
 export const getCategories = () => {
     return api.get("/products/categories");
+}   
+
+export const getProductByCategory = (category) => {
+return api.get(`/products/category/${category}`);
 }

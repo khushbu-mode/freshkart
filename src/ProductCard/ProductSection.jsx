@@ -2,22 +2,37 @@ import productData from "../data/productData";
 import ProductCard from "./ProductCard";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api from "../Api/api";
+import { getProducts } from "../services/productService";
+
 
 function ProductSection() {
 
   // State to store products fetched from API
   const [products, setProducts] = useState([]);
 
+  const [loading, setLoading] = useState(true);//loading state
+    const [error, setError] = useState(""); //if any error 
+
+
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await getProducts();
 
-        setProducts(response.data.products);
+        setLoading(true);
+
+        await new Promise((resolve) =>
+          setTimeout(resolve, 2000)
+        );
+
+       const response = await getProducts();
+       setProducts(response.data.products);
       } catch (error) {
 
         console.log(error);
+
+      }finally {
+        setLoading(false);
 
       }
     }
@@ -26,6 +41,13 @@ function ProductSection() {
   }, [])
 
 
+    if (loading) {
+    return (
+      <h1 className="text-center text-2xl mt-20">
+        Loading Products...
+      </h1>
+    );
+  }
 
   return (
     <section className="max-w-7xl mx-auto px-6 mt-14">

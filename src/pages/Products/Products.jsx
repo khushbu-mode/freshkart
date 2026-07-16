@@ -1,8 +1,7 @@
 import { IoSearchOutline } from "react-icons/io5";
 import { useState, useEffect } from "react";
-import api from "../../Api/api";
+import { getProducts, getCategories, getProductByCategory } from "../../services/productService";
 import ProductCard from "../../ProductCard/ProductCard";
-import productCategories from "../../data/productCategories";
 
 function Products() {
   const [search, setSearch] = useState("");
@@ -10,15 +9,35 @@ function Products() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [products, setProducts] = useState([]);
 
+  const [loading, setLoading] = useState(true);//loading state
+  const [error, setError] = useState(""); //if any error 
+
+  const [categories, setCategories] = useState([]);
   useEffect(() => {
 
     const fetchProducts = async () => {
       try {
-        const response = await getCategories();
+        setLoading(true);
+
+        await new Promise((resolve) =>
+          setTimeout(resolve, 2000)
+        );
+
+        const response = await getProducts();
         setProducts(response.data.products);
-      }catch (error) {
+
+        const categoryResponse = await getCategories();// for categories buttons
+
+        // const response = await getProductsByCategory("beauty");//category button filtering
+        setCategories(categoryResponse.data);
+        console.log(categoryResponse.data);
+      } catch (error) {
+        setError("Failed to load products");
         console.log(error);
-      }   
+      } finally {
+        setLoading(false);
+
+      }
     }
 
     fetchProducts();
@@ -39,6 +58,14 @@ function Products() {
 
   console.log("Selected Category:", selectedCategory);
   console.log("Filtered Products:", filteredProducts);
+
+    if (loading) {
+    return (
+      <h1 className="text-center text-2xl mt-20">
+        Loading Products...
+      </h1>
+    );
+  }
 
 
   return (
@@ -66,27 +93,34 @@ function Products() {
       {/* Categories */}
       <div className="flex gap-4 mb-10 flex-wrap">
 
-        {productCategories.map((category) => (
+        {categories.map((category) => (
 
           <button
-            key={category}
-            onClick={() => {
-              console.log("Clicked:", category);
-              setSelectedCategory(category);
-            }}
+            key={category.slug}
+           onClick={async () => {
+  setSelectedCategory(category.slug);
+
+  if (category.slug === "All") {
+    const response = await getProducts();
+    setProducts(response.data.products);
+  } else {
+    const response = await getProductByCategory(category.slug);
+    setProducts(response.data.products);
+  }
+}}
             className={`
         px-5
         py-2
         rounded-full
         transition-all
 
-        ${selectedCategory === category
+        ${selectedCategory === category.slug
                 ? "bg-green-600 text-white"
                 : "border border-gray-300 hover:bg-green-100"
               }
       `}
           >
-            {category}
+            {category.name}
           </button>
 
         ))}

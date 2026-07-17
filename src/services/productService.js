@@ -17,3 +17,12 @@ export const getCategories = () => {
 export const getProductByCategory = (category) => {
 return api.get(`/products/category/${category}`);
 }
+
+export const searchProducts = (search) => {
+    return api.get(`/products/search?q=${search}`);
+}
+
+
+export const addProduct = (data) => {
+  return api.post("/products/add", data);
+};

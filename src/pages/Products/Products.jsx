@@ -1,10 +1,12 @@
 import { IoSearchOutline } from "react-icons/io5";
 import { useState, useEffect } from "react";
-import { getProducts, getCategories, getProductByCategory } from "../../services/productService";
+import { getProducts, getCategories, getProductByCategory, searchProducts, } from "../../services/productService";
 import ProductCard from "../../ProductCard/ProductCard";
 
 function Products() {
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
 
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [products, setProducts] = useState([]);
@@ -43,6 +45,33 @@ function Products() {
     fetchProducts();
   }, [])
 
+  useEffect(() => {
+    const Timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => {
+      clearTimeout(Timer);
+    };
+  }, [search])
+
+
+  useEffect(() => {
+  const fetchSearchProducts = async () => {
+    try {
+      if (debouncedSearch.trim() === "") {
+        const response = await getProducts();
+        setProducts(response.data.products);
+      } else {
+        const response = await searchProducts(debouncedSearch);
+        setProducts(response.data.products);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchSearchProducts();
+}, [debouncedSearch]);
   // search implementation & filtering products based on search and selected category
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.title
@@ -59,7 +88,7 @@ function Products() {
   console.log("Selected Category:", selectedCategory);
   console.log("Filtered Products:", filteredProducts);
 
-    if (loading) {
+  if (loading) {
     return (
       <h1 className="text-center text-2xl mt-20">
         Loading Products...
@@ -85,7 +114,9 @@ function Products() {
           type="text"
           placeholder="Search products..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+  setSearch(e.target.value);
+}}
           className="flex-1 outline-none bg-transparent"
         />
       </div>
@@ -93,56 +124,74 @@ function Products() {
       {/* Categories */}
       <div className="flex gap-4 mb-10 flex-wrap">
 
-        {categories.map((category) => (
+  {/* All Button */}
+  <button
+    onClick={async () => {
+      setSelectedCategory("All");
 
-          <button
-            key={category.slug}
-           onClick={async () => {
-  setSelectedCategory(category.slug);
+      const response = await getProducts();
+      setProducts(response.data.products);
+    }}
+    className={`
+      px-5
+      py-2
+      rounded-full
+      transition-all
 
-  if (category.slug === "All") {
-    const response = await getProducts();
-    setProducts(response.data.products);
-  } else {
-    const response = await getProductByCategory(category.slug);
-    setProducts(response.data.products);
-  }
-}}
-            className={`
+      ${
+        selectedCategory === "All"
+          ? "bg-green-600 text-white"
+          : "border border-gray-300 hover:bg-green-100"
+      }
+    `}
+  >
+    All
+  </button>
+
+  {/* API Categories */}
+  {categories.map((category) => (
+
+    <button
+      key={category.slug}
+      onClick={async () => {
+        setSelectedCategory(category.slug);
+
+        const response = await getProductByCategory(category.slug);
+        setProducts(response.data.products);
+      }}
+      className={`
         px-5
         py-2
         rounded-full
         transition-all
 
-        ${selectedCategory === category.slug
-                ? "bg-green-600 text-white"
-                : "border border-gray-300 hover:bg-green-100"
-              }
+        ${
+          selectedCategory === category.slug
+            ? "bg-green-600 text-white"
+            : "border border-gray-300 hover:bg-green-100"
+        }
       `}
-          >
-            {category.name}
-          </button>
+    >
+      {category.name}
+    </button>
 
-        ))}
+  ))}
 
-      </div>
-
+</div>
       {/* Products Grid */}
 
       <div className="grid grid-cols-4 gap-6">
 
-        {filteredProducts.map((product) => (
-
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            name={product.title}
-            unit={product.category}
-            price={product.price}
-            image={product.thumbnail}
-          />
-
-        ))}
+       {products.map((product) => (
+  <ProductCard
+    key={product.id}
+    id={product.id}
+    name={product.title}
+    unit={product.category}
+    price={product.price}
+    image={product.thumbnail}
+  />
+))}
 
       </div>
 

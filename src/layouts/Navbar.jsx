@@ -1,16 +1,30 @@
 import { FaShoppingCart } from "react-icons/fa";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { IoSearchOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import CartDrawer from "../Cart/CartDrawer";
 import { useCart } from "../Hooks/useCart";
+import Cookies from "js-cookie";
 
 
 function Navbar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const { cartItems } = useCart();
+
+  // const token = localStorage.getItem("accessToken");// token local storage
+  const token = Cookies.get("accessToken"); //for cookies store token 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+  // localStorage.removeItem("accessToken");
+  Cookies.remove("accessToken");
+    window.location.reload();
+
+
+  navigate("/login");
+};
   
   // const [search, setSearch] = useState("");
 
@@ -60,12 +74,21 @@ function Navbar() {
           {/* Right */}
           <div className="flex items-center gap-6 whitespace-nowrap">
 
-            <Link
-              to="/login"
-              className="text-lg hover:text-green-600"
-            >
-              Login
-            </Link>
+          {token ? (
+  <button
+    onClick={handleLogout}
+    className="text-lg hover:text-red-600"
+  >
+    Logout
+  </button>
+) : (
+  <Link
+    to="/login"
+    className="text-lg hover:text-green-600"
+  >
+    Login
+  </Link>
+)}
 
             <button
               onClick={() => setIsCartOpen(true)}
